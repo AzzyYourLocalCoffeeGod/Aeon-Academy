@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aeon Stream | Learn Anything</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0f0f0f;
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .overlay-ui {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            font-size: 12px;
+            letter-spacing: 1px;
+            color: #ffd700;
+        }
+
+        .sidebar-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-glow {
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f0f0f; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <!-- Nav -->
+    <nav class="flex justify-between items-center px-6 py-4 border-b border-white/10 sticky top-0 bg-[#0f0f0f] z-50">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-yellow-500 rounded-sm flex items-center justify-center font-bold text-black">A</div>
+            <span class="text-xl font-bold tracking-tighter uppercase">Aeon<span class="text-yellow-500">Stream</span></span>
+        </div>
+        <div class="flex-1 max-w-xl mx-8 hidden md:block">
+            <div class="relative">
+                <input type="text" placeholder="Search the Infinite Library..." class="w-full bg-[#1a1a1a] border border-white/10 rounded-full px-5 py-2 text-sm focus:outline-none focus:border-yellow-500/50">
+            </div>
+        </div>
+        <div class="flex items-center gap-4 text-sm font-medium">
+            <span class="text-yellow-500">MASTER LEVEL: 14</span>
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-yellow-600 to-yellow-200"></div>
+        </div>
+    </nav>
+
+    <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 md:p-6">
+        
+        <!-- Main Player Area -->
+        <div class="lg:col-span-8">
+            <div class="video-container group">
+                <!-- Mock Video Content -->
+                <div class="aspect-video bg-[url('https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=1200')] bg-cover bg-center">
+                    <div class="w-full h-full bg-black/40 flex items-center justify-center">
+                        <button class="w-20 h-20 bg-yellow-500 rounded-full flex items-center justify-center text-black pl-1 hover:scale-110 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="overlay-ui font-mono">
+                    NEURAL SYNC: 98% | HAPTIC READY
+                </div>
+                
+                <!-- Interaction Zone -->
+                <div class="absolute bottom-4 left-4 right-4 bg-black/60 backdrop-blur p-4 rounded-lg flex justify-between items-center border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div class="flex gap-4">
+                        <button class="text-white hover:text-yellow-500">PLAY</button>
+                        <button class="text-white hover:text-yellow-500">REWIND</button>
+                    </div>
+                    <div class="flex-1 mx-8 h-1 bg-white/20 rounded-full relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2/3 h-full bg-yellow-500 progress-glow"></div>
+                    </div>
+                    <div class="text-xs font-mono">STEP 04: CALIBRATING OPTICAL SENSOR</div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <div class="flex gap-2 mb-4">
+                    <span class="tag">Biotech</span>
+                    <span class="tag">Engineering</span>
+                    <span class="tag text-yellow-500 border border-yellow-500/20 bg-yellow-500/10">Covenant Certified</span>
+                </div>
+                <h1 class="text-3xl font-bold mb-2">Intro to Remote Microsurgery: Haptic Calibration</h1>
+                <p class="text-slate-400 leading-relaxed">
+                    This "tutorial" covers the fundamentals of latency compensation. By completing this video, you unlock Level 1 access to the Physical Hub in your sector. 
+                    <span class="text-yellow-500 cursor-pointer">Show more</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Sidebar / "Next" Items -->
+        <div class="lg:col-span-4 space-y-4">
+            <h3 class="text-lg font-bold text-slate-300 mb-2">UP NEXT ON YOUR PATH</h3>
+            
+            <!-- Sidebar Card -->
+            <div class="flex gap-3 sidebar-item p-2 rounded-lg cursor-pointer transition-all">
+                <div class="w-40 h-24 bg-[url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=300')] bg-cover rounded-md flex-shrink-0"></div>
+                <div class="flex flex-col justify-center">
+                    <span class="text-sm font-bold leading-tight">Emergency Power Systems: 10 Minute Fix</span>
+                    <span class="text-xs text-slate-500 mt-1">Aeon Mechanics • 1.2M Learners</span>
+                    <span class="text-[10px] text-yellow-500/80 mt-1 font-mono">REWARD: +50 CORE EXP</span>
+                </div>
+            </div>
+
+            <div class="flex gap-3 sidebar-item p-2 rounded-lg cursor-pointer transition-all">
+                <div class="w-40 h-24 bg-[url('https://images.unsplash.com/photo-1532187875605-1ef6382391d4?auto=format&fit=crop&q=80&w=300')] bg-cover rounded-md flex-shrink-0"></div>
+                <div class="flex flex-col justify-center">
+                    <span class="text-sm font-bold leading-tight">Culture & Ethics: Why the Covenant Exists</span>
+                    <span class="text-xs text-slate-500 mt-1">Philosophy Dept • 800k Learners</span>
+                    <span class="text-[10px] text-yellow-500/80 mt-1 font-mono">REWARD: UNLOCKS HUB ACCESS</span>
+                </div>
+            </div>
+
+            <!-- Gamification Banner -->
+            <div class="bg-gradient-to-br from-yellow-500/20 to-transparent border border-yellow-500/30 p-6 rounded-xl mt-8">
+                <h4 class="text-yellow-500 font-bold mb-2">QUEST ACTIVE</h4>
+                <p class="text-xs text-slate-300 leading-normal">
+                    Complete 3 Biotech modules this week to earn the <span class="text-white font-bold">"Junior Medic"</span> digital badge and priority scheduling at Hub-12.
+                </p>
+                <div class="mt-4 h-2 bg-black/40 rounded-full">
+                    <div class="w-1/3 h-full bg-yellow-500 rounded-full"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
