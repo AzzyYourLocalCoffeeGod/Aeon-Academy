@@ -1,0 +1,178 @@
+import React, { useState, useMemo } from 'react';
+import { 
+  Users, 
+  BookOpen, 
+  Palette, 
+  BrainCircuit, 
+  Microscope, 
+  ScrollText, 
+  Layers,
+  Sparkles,
+  Search,
+  Globe2
+} from 'lucide-react';
+
+const App = () => {
+  const [totalStudents, setTotalStudents] = useState(600); // Millions
+  const [stemSplit, setStemSplit] = useState(60); // % STEM
+  const [researchSplit, setResearchSplit] = useState(15); // % staying for PhD/Research
+
+  const stats = useMemo(() => {
+    const total = totalStudents * 1e6;
+    const stemCount = total * (stemSplit / 100);
+    const artsCount = total * ((100 - stemSplit) / 100);
+    const researcherCount = total * (researchSplit / 100);
+    
+    // Revenue based on $25/mo
+    const monthlyRevenue = total * 25;
+    const annualSurplus = (monthlyRevenue * 12) - 40e9; // Minus higher maintenance for labs/studios
+
+    return {
+      stemCount,
+      artsCount,
+      researcherCount,
+      annualSurplus,
+      graduates: total / 4
+    };
+  }, [totalStudents, stemSplit, researchSplit]);
+
+  return (
+    <div className="min-h-screen bg-[#050505] text-slate-400 font-sans">
+      {/* Navigation Overlay */}
+      <nav className="border-b border-white/5 bg-black/50 backdrop-blur-md sticky top-0 z-50 p-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="bg-gradient-to-tr from-purple-600 to-blue-500 p-2 rounded-lg">
+              <Layers className="text-white" size={20} />
+            </div>
+            <span className="font-black text-white tracking-tighter text-xl">THE SYNTHESIS</span>
+          </div>
+          <div className="hidden md:flex gap-6 text-[10px] font-bold uppercase tracking-widest">
+            <span className="text-blue-500">Infrastructure</span>
+            <span className="text-purple-500">Culture</span>
+            <span className="text-emerald-500">Philosophy</span>
+          </div>
+        </div>
+      </nav>
+
+      <main className="max-w-7xl mx-auto p-6 md:p-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          
+          {/* Left Column: The Configuration */}
+          <div className="lg:col-span-4 space-y-8">
+            <section className="bg-[#111] border border-white/5 rounded-3xl p-8">
+              <h2 className="text-white font-bold mb-6 flex items-center gap-2">
+                <Search size={18} className="text-blue-500" /> System Tuning
+              </h2>
+              
+              <div className="space-y-8">
+                <div>
+                  <div className="flex justify-between text-xs mb-3 font-bold uppercase">
+                    <span>Active Learners</span>
+                    <span className="text-white">{totalStudents}M</span>
+                  </div>
+                  <input type="range" min="100" max="1000" value={totalStudents} onChange={e => setTotalStudents(e.target.value)} className="w-full accent-blue-500" />
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-xs mb-3 font-bold uppercase">
+                    <span>STEM vs. Humanities Ratio</span>
+                    <span className="text-purple-400">{100-stemSplit}% Humanities</span>
+                  </div>
+                  <input type="range" min="20" max="80" value={stemSplit} onChange={e => setStemSplit(e.target.value)} className="w-full accent-purple-500" />
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-xs mb-3 font-bold uppercase">
+                    <span>Research/PhD Track</span>
+                    <span className="text-emerald-400">{researchSplit}% Advanced</span>
+                  </div>
+                  <input type="range" min="5" max="30" value={researchSplit} onChange={e => setResearchSplit(e.target.value)} className="w-full accent-emerald-500" />
+                </div>
+              </div>
+            </section>
+
+            <div className="p-8 bg-blue-600 rounded-3xl text-white">
+              <Sparkles className="mb-4" />
+              <h3 className="text-2xl font-black mb-2">The Phygital Blend</h3>
+              <p className="text-blue-100 text-sm leading-relaxed">
+                The digital handles the lecture. The physical hubs—built by the STEM graduates—become the "Agoras" for the philosophers, the "Ateliers" for the artists, and the "Clinics" for the psychologists.
+              </p>
+            </div>
+          </div>
+
+          {/* Right Column: The Synthesis View */}
+          <div className="lg:col-span-8 space-y-8">
+            
+            {/* Top Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-[#111] p-6 rounded-2xl border border-white/5">
+                <BrainCircuit className="text-purple-500 mb-3" />
+                <h4 className="text-white font-bold">Soul & Mind</h4>
+                <p className="text-2xl font-mono text-white">{(stats.artsCount / 1e6).toFixed(0)}M</p>
+                <p className="text-[10px] uppercase font-bold text-slate-500">Artists & Thinkers</p>
+              </div>
+              <div className="bg-[#111] p-6 rounded-2xl border border-white/5">
+                <Microscope className="text-emerald-500 mb-3" />
+                <h4 className="text-white font-bold">Pure Research</h4>
+                <p className="text-2xl font-mono text-white">{(stats.researcherCount / 1e6).toFixed(0)}M</p>
+                <p className="text-[10px] uppercase font-bold text-slate-500">PhD & Professorships</p>
+              </div>
+              <div className="bg-[#111] p-6 rounded-2xl border border-white/5">
+                <Globe2 className="text-blue-500 mb-3" />
+                <h4 className="text-white font-bold">Annual Surplus</h4>
+                <p className="text-2xl font-mono text-white">${(stats.annualSurplus / 1e9).toFixed(1)}B</p>
+                <p className="text-[10px] uppercase font-bold text-slate-500">For Physical Centers</p>
+              </div>
+            </div>
+
+            {/* Detailed Tracks */}
+            <div className="bg-[#111] rounded-3xl border border-white/5 overflow-hidden">
+              <div className="p-8 border-b border-white/5 flex items-center justify-between">
+                <h3 className="text-white font-bold flex items-center gap-2 uppercase tracking-widest text-xs">
+                  <BookOpen size={14} /> The Multi-Realm Curriculum
+                </h3>
+              </div>
+              <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <div className="flex gap-4">
+                    <div className="bg-purple-500/10 p-3 rounded-xl h-fit"><ScrollText className="text-purple-500" /></div>
+                    <div>
+                      <h5 className="text-white font-bold text-sm">Philosophers & Theologians</h5>
+                      <p className="text-xs mt-1 leading-relaxed text-slate-400">Tasked with defining the ethics of the new infrastructure. They govern the "Why" while STEM handles the "How".</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="bg-pink-500/10 p-3 rounded-xl h-fit"><Palette className="text-pink-500" /></div>
+                    <div>
+                      <h5 className="text-white font-bold text-sm">Artists & Curators</h5>
+                      <p className="text-xs mt-1 leading-relaxed text-slate-400">Designing the aesthetic of the new cities. Turning solar farms into public sculpture gardens.</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-6">
+                  <div className="flex gap-4">
+                    <div className="bg-yellow-500/10 p-3 rounded-xl h-fit"><BrainCircuit className="text-yellow-500" /></div>
+                    <div>
+                      <h5 className="text-white font-bold text-sm">Psychological Specialists</h5>
+                      <p className="text-xs mt-1 leading-relaxed text-slate-400">Healing the collective trauma of the "Old World" and managing the transition to a high-agency society.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="bg-emerald-500/10 p-3 rounded-xl h-fit"><Users className="text-emerald-500" /></div>
+                    <div>
+                      <h5 className="text-white font-bold text-sm">The Professorship</h5>
+                      <p className="text-xs mt-1 leading-relaxed text-slate-400">The 10-year Ph.D. track. These students become the localized mentors at the physical hubs, bridging the digital content to real-world practice.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default App;
