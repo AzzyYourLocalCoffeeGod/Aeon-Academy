@@ -1,0 +1,211 @@
+import React, { useState, useMemo } from 'react';
+import { 
+  ShieldCheck, 
+  HeartPulse, 
+  HardDrive, 
+  Globe, 
+  ArrowRight,
+  Droplets,
+  Zap,
+  TrendingUp,
+  Sprout,
+  Mountain
+} from 'lucide-react';
+
+const App = () => {
+  const [studentCount, setStudentCount] = useState(15000000); // 15M Start
+  
+  // Costs (Annualized)
+  const hardwareBundleCost = 600; 
+  const amortizationYears = 4;
+  const annualHardwareCost = hardwareBundleCost / amortizationYears; // $150/year
+  
+  const serverOpexPerYear = 700000000; 
+  const tuitionPerMonth = 15; 
+  
+  const stats = useMemo(() => {
+    const annualRevenue = tuitionPerMonth * 12 * studentCount;
+    const totalHardwareOpex = annualHardwareCost * studentCount;
+    const totalSystemCost = totalHardwareOpex + serverOpexPerYear;
+    const surplus = annualRevenue - totalSystemCost;
+    
+    // Impact potential
+    const clinicsFunded = Math.max(0, Math.floor(surplus / 250000));
+    const waterSystems = Math.max(0, Math.floor(surplus / 50000));
+    
+    // Long-term Terraforming & Ag (Surplus Allocation)
+    // $1B per major Bio-Reserve restoration
+    const bioReserves = Math.max(0, (surplus / 1e9).toFixed(1));
+    // $10B per regional Terraforming Project
+    const terraformingProgress = Math.min(100, (surplus / 25e9) * 100).toFixed(1);
+    
+    return {
+      annualRevenue,
+      totalSystemCost,
+      surplus,
+      clinicsFunded,
+      waterSystems,
+      bioReserves,
+      terraformingProgress
+    };
+  }, [studentCount]);
+
+  const formatCurrency = (val) => {
+    if (val >= 1e9) return `$${(val / 1e9).toFixed(1)}B`;
+    if (val >= 1e6) return `$${(val / 1e6).toFixed(0)}M`;
+    return `$${val.toLocaleString()}`;
+  };
+
+  return (
+    <div className="min-h-screen bg-[#050508] text-slate-200 font-sans p-4 md:p-12">
+      {/* HUD Header */}
+      <div className="max-w-6xl mx-auto border-b border-white/10 pb-8 mb-12 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>
+          <h1 className="text-3xl font-black tracking-tighter text-white flex items-center gap-3">
+            <ShieldCheck className="text-emerald-500" size={32} />
+            THE IMPACT PROTOCOL
+          </h1>
+          <p className="text-slate-500 text-xs font-mono mt-1 uppercase tracking-widest">
+            Level 0: Infrastructure {"->"} Level 1: Planetary Restoration
+          </p>
+        </div>
+        <div className="flex gap-4">
+           <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl">
+              <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1 text-center">Protocol Surplus</p>
+              <p className="text-2xl font-black font-mono text-emerald-400">{formatCurrency(stats.surplus)}</p>
+           </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        {/* Scale Control */}
+        <div className="lg:col-span-3 space-y-8">
+          <div className="bg-white/5 border border-white/10 p-8 rounded-[2.5rem] relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-8 opacity-10">
+                <Globe size={120} />
+            </div>
+            
+            <div className="relative z-10">
+                <div className="flex justify-between items-end mb-8">
+                  <div>
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Global Adoption Scale</label>
+                    <h3 className="text-white text-lg font-bold">Network Nodes (Students)</h3>
+                  </div>
+                  <span className="text-5xl font-black text-white italic">{(studentCount/1e6).toFixed(1)}M</span>
+                </div>
+                
+                <input 
+                  type="range" min="1000000" max="250000000" step="1000000"
+                  value={studentCount}
+                  onChange={(e) => setStudentCount(Number(e.target.value))}
+                  className="w-full h-3 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500 mb-8"
+                />
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="p-6 bg-black/40 rounded-2xl border border-white/5">
+                        <HardDrive size={20} className="text-blue-400 mb-3" />
+                        <p className="text-[10px] text-slate-500 font-black uppercase">Hardware Lifecycle</p>
+                        <p className="text-xl font-mono text-white">{formatCurrency(studentCount * annualHardwareCost)}</p>
+                    </div>
+                    <div className="p-6 bg-black/40 rounded-2xl border border-white/5">
+                        <Zap size={20} className="text-amber-400 mb-3" />
+                        <p className="text-[10px] text-slate-500 font-black uppercase">Grid Maintenance</p>
+                        <p className="text-xl font-mono text-white">$700M</p>
+                    </div>
+                    <div className="p-6 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
+                        <TrendingUp size={20} className="text-emerald-400 mb-3" />
+                        <p className="text-[10px] text-emerald-500 font-black uppercase">Annual Revenue</p>
+                        <p className="text-xl font-mono text-emerald-400">{formatCurrency(stats.annualRevenue)}</p>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+          {/* Level 1 Impacts: Terraforming & Agriculture */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-gradient-to-br from-emerald-900/40 to-black p-8 rounded-[2rem] border border-emerald-500/30">
+              <div className="flex justify-between items-start mb-6">
+                <Sprout className="text-emerald-400" size={32} />
+                <span className="text-[10px] font-black bg-emerald-500 text-black px-2 py-1 rounded">DECADES 1-3</span>
+              </div>
+              <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-2">Non-Synthetic Agriculture</h3>
+              <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+                Reclaiming topsoil and establishing regenerative heritage crop zones. Funding soil microbiotic restoration.
+              </p>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-black text-emerald-400 font-mono">{stats.bioReserves}</span>
+                <span className="text-xs font-bold text-slate-500 uppercase">Billion-Dollar Reserves/Yr</span>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-blue-900/40 to-black p-8 rounded-[2rem] border border-blue-500/30">
+              <div className="flex justify-between items-start mb-6">
+                <Mountain className="text-blue-400" size={32} />
+                <span className="text-[10px] font-black bg-blue-500 text-black px-2 py-1 rounded">DECADES 4-10</span>
+              </div>
+              <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-2">Planetary Terraforming</h3>
+              <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+                Large-scale atmospheric carbon sequestration and regional climate stabilization via the Global Surplus.
+              </p>
+              <div className="w-full bg-slate-800 h-2 rounded-full mb-2">
+                <div 
+                    className="h-full bg-blue-500 transition-all duration-500" 
+                    style={{ width: `${stats.terraformingProgress}%` }}
+                ></div>
+              </div>
+              <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
+                <span className="text-slate-500">Regional Phase</span>
+                <span className="text-blue-400">{stats.terraformingProgress}% Funded</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* The Impact Sidebar */}
+        <div className="space-y-6">
+            <div className="bg-white/5 border border-white/10 rounded-[2rem] p-6">
+                <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Immediate Deployments</h4>
+                <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                        <div className="p-2 bg-emerald-500/20 rounded-lg text-emerald-400"><HeartPulse size={16}/></div>
+                        <div>
+                            <p className="text-xs font-bold text-white">{stats.clinicsFunded.toLocaleString()}</p>
+                            <p className="text-[10px] text-slate-500 uppercase">Medical Units</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <div className="p-2 bg-blue-500/20 rounded-lg text-blue-400"><Droplets size={16}/></div>
+                        <div>
+                            <p className="text-xs font-bold text-white">{stats.waterSystems.toLocaleString()}</p>
+                            <p className="text-[10px] text-slate-500 uppercase">Water Hubs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-white/5 border border-white/10 rounded-[2rem] p-8">
+                <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Century Projection</h2>
+                <div className="space-y-6">
+                    <p className="text-xs text-slate-500 italic leading-relaxed">
+                        At <span className="text-white">200M Nodes</span>, the surplus exceeds <span className="text-emerald-400 font-bold">$35 Billion annually</span>. 
+                    </p>
+                    <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">Primary Directive</p>
+                        <p className="text-[11px] text-slate-300">
+                            Transition from providing hardware to regenerating the physical Earth. Every $15 subscription becomes a vote for the return of nature.
+                        </p>
+                    </div>
+                    <button className="w-full py-4 bg-white text-black font-black uppercase text-[10px] tracking-widest rounded-2xl hover:bg-emerald-400 transition-colors flex items-center justify-center gap-2">
+                        Execute Restoration <ArrowRight size={14} />
+                    </button>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default App;
