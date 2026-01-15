@@ -1,0 +1,246 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Users, 
+  Zap, 
+  Shield, 
+  Flame, 
+  Trophy, 
+  MessageSquare, 
+  Wifi, 
+  Heart,
+  Star,
+  Award,
+  Lock,
+  Unlock
+} from 'lucide-react';
+
+const App = () => {
+  const [resonance, setResonance] = useState(72);
+  const [activeBuffs, setActiveBuffs] = useState([
+    { id: 1, name: 'Collective Focus', icon: <Zap size={14} />, color: 'text-yellow-400', desc: '+15% EXP Gain' },
+    { id: 2, name: 'Peer Support', icon: <Heart size={14} />, color: 'text-pink-400', desc: '-20% Fatigue' }
+  ]);
+  const [socialExp, setSocialExp] = useState(450);
+  const [nearbyPeers, setNearbyPeers] = useState([
+    { id: 1, name: 'Kael_99', status: 'Syncing', color: 'bg-cyan-500' },
+    { id: 2, name: 'Sora_V', status: 'Focused', color: 'bg-emerald-500' },
+    { id: 3, name: 'Xenon', status: 'Notetaking', color: 'bg-purple-500' }
+  ]);
+
+  // Social Resonance Pulse
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setResonance(prev => {
+        const change = Math.random() > 0.5 ? 1 : -1;
+        return Math.min(Math.max(prev + change, 60), 100);
+      });
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#05050a] text-slate-200 font-sans p-4 md:p-8 overflow-x-hidden">
+      
+      {/* Social Resonance Header */}
+      <div className="max-w-7xl mx-auto mb-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="md:col-span-3 bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 flex items-center justify-between shadow-2xl overflow-hidden relative">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50"></div>
+          
+          <div className="flex items-center gap-6">
+            <div className="relative">
+              <div className="w-16 h-16 rounded-full border-2 border-cyan-500/30 flex items-center justify-center bg-cyan-500/10">
+                <Users className="text-cyan-400" size={32} />
+              </div>
+              <div className="absolute -bottom-1 -right-1 bg-emerald-500 w-4 h-4 rounded-full border-2 border-[#05050a]"></div>
+            </div>
+            
+            <div>
+              <h2 className="text-xl font-bold tracking-tight">Class Social Resonance</h2>
+              <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold flex items-center gap-2">
+                <Wifi size={12} className="text-emerald-400 animate-pulse" /> Global Peer Sync Active
+              </p>
+            </div>
+          </div>
+
+          <div className="hidden lg:flex items-center gap-8">
+            <div className="text-center">
+              <p className="text-[10px] text-slate-500 uppercase font-bold mb-1">Social Multiplier</p>
+              <p className="text-2xl font-mono font-bold text-cyan-400">x{(1 + resonance/100).toFixed(2)}</p>
+            </div>
+            <div className="w-[1px] h-10 bg-white/10"></div>
+            <div className="text-right">
+              <p className="text-[10px] text-slate-500 uppercase font-bold mb-1">Resonance Level</p>
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-32 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-cyan-500 transition-all duration-1000" style={{ width: `${resonance}%` }}></div>
+                </div>
+                <span className="font-mono text-sm font-bold text-white">{resonance}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-indigo-600/20 border border-indigo-500/30 rounded-3xl p-6 flex flex-col justify-center items-center text-center">
+          <Trophy className="text-yellow-400 mb-2" size={24} />
+          <p className="text-[10px] uppercase font-bold text-indigo-300">Next Class Reward</p>
+          <p className="text-sm font-bold text-white">"Grand Archive Access"</p>
+          <p className="text-[10px] text-indigo-300/60 mt-1">Requires 95% Group Presence</p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        {/* Left Sidebar: Active Buffs & Rewards */}
+        <div className="space-y-6">
+          <div className="bg-slate-900/40 border border-white/5 rounded-3xl p-6 backdrop-blur-sm">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500 mb-6 flex items-center gap-2">
+              <Flame size={14} className="text-orange-500" /> Active Class Buffs
+            </h3>
+            <div className="space-y-4">
+              {activeBuffs.map(buff => (
+                <div key={buff.id} className="group p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-white/20 transition-all">
+                  <div className="flex items-center gap-3 mb-1">
+                    <span className={buff.color}>{buff.icon}</span>
+                    <span className="text-sm font-bold">{buff.name}</span>
+                  </div>
+                  <p className="text-[10px] text-slate-400 pl-6">{buff.desc}</p>
+                </div>
+              ))}
+            </div>
+            <button className="w-full mt-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-lg shadow-indigo-600/20">
+              Contribute Social EXP
+            </button>
+          </div>
+
+          <div className="bg-gradient-to-b from-slate-900/60 to-slate-950 border border-white/5 rounded-3xl p-6">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500 mb-6 flex items-center gap-2">
+              <Star size={14} className="text-yellow-500" /> Interaction Rewards
+            </h3>
+            <div className="space-y-3">
+              {[
+                { label: 'VR Handshake', xp: '+50', icon: <Heart size={12}/> },
+                { label: 'Note Sharing', xp: '+120', icon: <MessageSquare size={12}/> },
+                { label: 'Group Question', xp: '+200', icon: <Award size={12}/> },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center justify-between p-3 bg-black/40 rounded-xl border border-white/5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-400">{item.icon}</span>
+                    <span className="text-[11px] font-medium">{item.label}</span>
+                  </div>
+                  <span className="text-[10px] font-bold text-cyan-400">{item.xp} XP</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Main Center: VR Environment HUD */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="relative aspect-[16/10] rounded-[2.5rem] overflow-hidden border-8 border-slate-900 shadow-2xl group">
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=1200')] bg-cover bg-center"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#05050a] via-transparent to-black/40"></div>
+            
+            {/* Social HUD Overlays */}
+            <div className="absolute top-8 left-8 flex flex-col gap-3">
+              <div className="flex items-center gap-3 bg-black/60 backdrop-blur-md p-2 pr-4 rounded-full border border-white/10 scale-90 origin-left">
+                <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center">
+                  <Shield size={16} className="text-white" />
+                </div>
+                <div>
+                  <p className="text-[9px] font-bold text-indigo-300 leading-none">AURA SHIELD</p>
+                  <p className="text-[11px] font-bold text-white">Active (3 Peers Nearby)</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Central Interaction Prompt */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+              <div className="bg-cyan-500/20 backdrop-blur-xl p-8 rounded-full border border-cyan-500/50 flex flex-col items-center animate-pulse">
+                <Users size={48} className="text-cyan-400 mb-2" />
+                <span className="text-xs font-black uppercase tracking-widest text-white">Sync with Peers</span>
+              </div>
+            </div>
+
+            <div className="absolute bottom-8 left-8 right-8">
+               <div className="flex justify-between items-end">
+                  <div className="space-y-1">
+                    <p className="text-cyan-400 text-[10px] font-black tracking-[0.3em] uppercase">Instructor Channel</p>
+                    <h1 className="text-3xl font-black text-white italic tracking-tight">DIMENSIONAL ETHICS</h1>
+                  </div>
+                  <div className="bg-white/10 backdrop-blur px-4 py-2 rounded-2xl border border-white/10 flex items-center gap-3">
+                    <div className="flex -space-x-2">
+                      {[1,2,3].map(i => <div key={i} className="w-6 h-6 rounded-full border border-black bg-slate-700"></div>)}
+                    </div>
+                    <span className="text-[10px] font-bold">+12 Nearby</span>
+                  </div>
+               </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            <div className="bg-slate-900/40 p-6 rounded-[2rem] border border-white/5">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-4">Proximity Sync</h4>
+              <div className="space-y-3">
+                {nearbyPeers.map(peer => (
+                  <div key={peer.id} className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-2 h-2 rounded-full ${peer.color} shadow-[0_0_8px] shadow-current`}></div>
+                      <span className="text-xs font-bold text-slate-300">{peer.name}</span>
+                    </div>
+                    <span className="text-[9px] font-mono text-slate-500">{peer.status}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-slate-900/40 p-6 rounded-[2rem] border border-white/5 flex flex-col justify-between">
+              <div>
+                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Social EXP Progress</h4>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-2xl font-black text-white">{socialExp}</span>
+                  <span className="text-xs font-bold text-slate-600">/ 1000</span>
+                </div>
+              </div>
+              <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden mt-4">
+                <div className="h-full bg-gradient-to-r from-indigo-500 to-cyan-500" style={{ width: '45%' }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar: Chat & Feed */}
+        <div className="bg-[#0a0a15] border border-white/5 rounded-3xl flex flex-col overflow-hidden shadow-2xl">
+          <div className="p-6 border-bottom border-white/5">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
+              <MessageSquare size={14} className="text-cyan-500" /> Neural Chat
+            </h3>
+          </div>
+          <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+             <div className="bg-white/5 p-3 rounded-2xl rounded-tl-none">
+                <p className="text-[10px] font-bold text-indigo-400 mb-1">System</p>
+                <p className="text-[11px] leading-relaxed italic text-slate-400">Class Focus reached 80%! "Analytical Insight" buff unlocked for all participants.</p>
+             </div>
+             <div className="bg-white/5 p-3 rounded-2xl rounded-tl-none">
+                <p className="text-[10px] font-bold text-cyan-400 mb-1">Kael_99</p>
+                <p className="text-[11px] leading-relaxed">Did anyone catch the last theorem? My sync dropped for a second.</p>
+             </div>
+             <div className="bg-cyan-500/10 p-3 rounded-2xl rounded-tr-none ml-4 border border-cyan-500/20">
+                <p className="text-[10px] font-bold text-white mb-1">You</p>
+                <p className="text-[11px] leading-relaxed">Check the shared board—I pinned a snippet of it there.</p>
+             </div>
+          </div>
+          <div className="p-4 bg-white/5">
+             <div className="relative">
+                <input type="text" placeholder="Send neural pulse..." className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-xs focus:outline-none focus:border-cyan-500/50" />
+                <button className="absolute right-2 top-2 p-1 text-cyan-500 hover:text-cyan-400">
+                  <Zap size={16} />
+                </button>
+             </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default App;
