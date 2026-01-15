@@ -1,0 +1,185 @@
+import React, { useState, useMemo } from 'react';
+import { 
+  Globe, 
+  Server, 
+  Users, 
+  DollarSign, 
+  TrendingDown, 
+  Database, 
+  MapPin,
+  Cpu,
+  Zap
+} from 'lucide-react';
+
+const App = () => {
+  const [studentCount, setStudentCount] = useState(1000000); // Start at 1M
+  
+  // Infrastructure Specs
+  const regions = [
+    { name: "North America", nodes: 3, color: "text-blue-400" },
+    { name: "Latin America", nodes: 3, color: "text-emerald-400" },
+    { name: "Europe", nodes: 3, color: "text-purple-400" },
+    { name: "Asia", nodes: 6, color: "text-red-400" },
+    { name: "Africa", nodes: 6, color: "text-orange-400" },
+  ];
+
+  const totalNodes = 21;
+  const yearlyServerMaintenance = 500000000; // $500M for high-tier global infrastructure
+  const connectivityCosts = 200000000; // $200M for Starlink/Fiber backbone
+  const totalFixedCosts = yearlyServerMaintenance + connectivityCosts;
+
+  // Logic: Tuition = (Fixed Costs / Students) + minimal margin for "Becoming" forge
+  const tuitionPerYear = useMemo(() => {
+    const base = totalFixedCosts / studentCount;
+    const cloudProcessingFee = 5; // Fixed $5/year for personal AI compute
+    return (base + cloudProcessingFee).toFixed(2);
+  }, [studentCount]);
+
+  const monthlyTuition = (tuitionPerYear / 12).toFixed(2);
+
+  return (
+    <div className="min-h-screen bg-[#020205] text-white font-sans p-4 md:p-8">
+      {/* Header */}
+      <div className="max-w-6xl mx-auto mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
+        <div>
+          <h1 className="text-4xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
+            ECONOMY OF ASCENSION
+          </h1>
+          <p className="text-slate-500 font-bold text-xs tracking-[0.3em] uppercase mt-2">
+            Global Infrastructure Sync // Node-Link Protocol
+          </p>
+        </div>
+        <div className="bg-white/5 border border-white/10 px-6 py-3 rounded-2xl flex items-center gap-4">
+          <div className="text-right">
+            <p className="text-[10px] font-black text-slate-500 uppercase">Current Tuition</p>
+            <p className="text-2xl font-mono text-emerald-400">${monthlyTuition}<span className="text-xs text-slate-400">/mo</span></p>
+          </div>
+          <TrendingDown className="text-emerald-400 animate-bounce" size={24} />
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* Left Column: The Nodes */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-8 opacity-10">
+              <Globe size={120} />
+            </div>
+            
+            <h2 className="text-lg font-black uppercase tracking-widest mb-8 flex items-center gap-2">
+              <Server size={20} className="text-blue-400" />
+              Global Server Distribution ({totalNodes} Strategic Nodes)
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {regions.map((region) => (
+                <div key={region.name} className="bg-black/40 border border-white/5 p-4 rounded-2xl flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    <MapPin size={16} className={region.color} />
+                    <span className="font-bold text-sm">{region.name}</span>
+                  </div>
+                  <div className="flex gap-1">
+                    {[...Array(region.nodes)].map((_, i) => (
+                      <div key={i} className={`w-3 h-3 rounded-sm bg-current ${region.color} opacity-80 shadow-[0_0_8px_currentColor]`}></div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-start gap-4">
+              <Zap className="text-blue-400 mt-1" size={18} />
+              <div>
+                <p className="text-xs font-bold text-blue-300 uppercase">Powering the VR Fabric</p>
+                <p className="text-[11px] text-slate-400 leading-relaxed mt-1">
+                  Each node is a dedicated NVIDIA Blackwell Forge cluster, syncing via Starlink to maintain sub-20ms latency for all {studentCount.toLocaleString()} students simultaneously.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Scale Slider */}
+          <div className="bg-gradient-to-r from-blue-600/20 to-emerald-600/20 border border-white/10 rounded-3xl p-8">
+             <div className="flex justify-between items-center mb-6">
+                <h2 className="text-lg font-black uppercase tracking-widest flex items-center gap-2">
+                  <Users size={20} />
+                  Scale the Collective
+                </h2>
+                <span className="text-2xl font-mono font-bold text-blue-400">
+                  { (studentCount / 1000000).toFixed(0) }M Students
+                </span>
+             </div>
+             <input 
+               type="range" 
+               min="1000000" 
+               max="100000000" 
+               step="1000000"
+               value={studentCount}
+               onChange={(e) => setStudentCount(parseInt(e.target.value))}
+               className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
+             />
+             <div className="flex justify-between mt-4 text-[10px] font-black text-slate-500 uppercase">
+                <span>1 Million</span>
+                <span>50 Million</span>
+                <span>100 Million</span>
+             </div>
+          </div>
+        </div>
+
+        {/* Right Column: Financial Visualization */}
+        <div className="space-y-6">
+          <div className="bg-[#0a0a15] border border-white/10 rounded-3xl p-8 flex flex-col h-full">
+            <h2 className="text-lg font-black uppercase tracking-widest mb-8">System Overhead</h2>
+            
+            <div className="space-y-6 flex-grow">
+              <div className="flex justify-between items-end">
+                <div className="text-[10px] font-bold text-slate-500 uppercase">Fixed Yearly Opex</div>
+                <div className="text-xl font-mono">${(totalFixedCosts / 1000000).toFixed(0)}M</div>
+              </div>
+              <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bg-blue-500 w-full opacity-50"></div>
+              </div>
+
+              <div className="flex justify-between items-end">
+                <div className="text-[10px] font-bold text-slate-500 uppercase">Cost Per Student</div>
+                <div className="text-xl font-mono text-emerald-400">${tuitionPerYear}/yr</div>
+              </div>
+              
+              <div className="p-6 bg-white/5 border border-white/5 rounded-2xl mt-4">
+                 <p className="text-[10px] font-black text-slate-500 uppercase mb-4 tracking-tighter">Tuition Breakdown</p>
+                 <div className="space-y-3">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-400">Infrastructure</span>
+                      <span>${(totalFixedCosts / studentCount).toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-400">AI Forge Time</span>
+                      <span>$5.00</span>
+                    </div>
+                    <div className="h-[1px] bg-white/10 w-full"></div>
+                    <div className="flex justify-between text-sm font-bold">
+                      <span>Total Monthly</span>
+                      <span className="text-emerald-400">${monthlyTuition}</span>
+                    </div>
+                 </div>
+              </div>
+            </div>
+
+            <div className="mt-12 text-[10px] text-slate-500 leading-tight italic">
+              "The cost of ignorance is billions; the cost of becoming is merely the electricity of the collective."
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Background HUD element */}
+      <div className="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden opacity-5">
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-white rounded-full"></div>
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] border border-white/50 rounded-full"></div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
