@@ -1,0 +1,166 @@
+import React, { useState, useMemo } from 'react';
+import { 
+  ShieldCheck, 
+  HeartPulse, 
+  HardDrive, 
+  Globe, 
+  ArrowRight,
+  Droplets,
+  Zap,
+  TrendingUp,
+  CreditCard
+} from 'lucide-react';
+
+const App = () => {
+  const [studentCount, setStudentCount] = useState(10000000); // 10M Start
+  
+  // Costs (Annualized)
+  const hardwareBundleCost = 600; // Headset + Terminal + Solar
+  const amortizationYears = 4;
+  const annualHardwareCost = hardwareBundleCost / amortizationYears; // $150/year
+  
+  const serverOpexPerYear = 700000000; // Global grid opex
+  const tuitionPerMonth = 15; // The "Flat Rate" for everything
+  
+  const stats = useMemo(() => {
+    const annualRevenue = tuitionPerMonth * 12 * studentCount;
+    const totalHardwareOpex = annualHardwareCost * studentCount;
+    const totalSystemCost = totalHardwareOpex + serverOpexPerYear;
+    const surplus = annualRevenue - totalSystemCost;
+    
+    // Impact potential
+    const clinicsFunded = Math.max(0, Math.floor(surplus / 250000)); // $250k per clinic
+    const waterSystems = Math.max(0, Math.floor(surplus / 50000)); // $50k per system
+    
+    return {
+      annualRevenue,
+      totalSystemCost,
+      surplus,
+      clinicsFunded,
+      waterSystems
+    };
+  }, [studentCount]);
+
+  const formatCurrency = (val) => {
+    if (val >= 1e9) return `$${(val / 1e9).toFixed(1)}B`;
+    if (val >= 1e6) return `$${(val / 1e6).toFixed(0)}M`;
+    return `$${val.toLocaleString()}`;
+  };
+
+  return (
+    <div className="min-h-screen bg-[#050508] text-slate-200 font-sans p-6 md:p-12">
+      {/* HUD Header */}
+      <div className="max-w-5xl mx-auto border-b border-white/10 pb-8 mb-12 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>
+          <h1 className="text-3xl font-black tracking-tighter text-white flex items-center gap-3">
+            <ShieldCheck className="text-emerald-500" size={32} />
+            THE IMPACT PROTOCOL
+          </h1>
+          <p className="text-slate-500 text-xs font-mono mt-1">REVENUE SURPLUS {"->"} GLOBAL INFRASTRUCTURE RE-INJECTION</p>
+        </div>
+        <div className="flex gap-4">
+           <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg">
+              <p className="text-[10px] text-slate-500 uppercase font-bold">Fixed Tuition</p>
+              <p className="text-xl font-mono text-white">${tuitionPerMonth}/mo</p>
+           </div>
+        </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* Input Control */}
+        <div className="lg:col-span-2 space-y-8">
+          <div className="bg-white/5 border border-white/10 p-8 rounded-3xl">
+            <div className="flex justify-between items-end mb-8">
+              <label className="text-sm font-bold text-slate-400 uppercase tracking-widest">Active Student Body</label>
+              <span className="text-4xl font-black text-white italic">{(studentCount/1e6).toFixed(0)}M</span>
+            </div>
+            <input 
+              type="range" min="1000000" max="100000000" step="1000000"
+              value={studentCount}
+              onChange={(e) => setStudentCount(Number(e.target.value))}
+              className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+            />
+            
+            <div className="grid grid-cols-3 mt-12 gap-4">
+              <div className="p-4 bg-black/40 rounded-xl border border-white/5">
+                <HardDrive size={18} className="text-blue-400 mb-2" />
+                <p className="text-[10px] text-slate-500 font-bold uppercase">Hardware/Yr</p>
+                <p className="text-sm font-mono">${formatCurrency(studentCount * annualHardwareCost)}</p>
+              </div>
+              <div className="p-4 bg-black/40 rounded-xl border border-white/5">
+                <Globe size={18} className="text-purple-400 mb-2" />
+                <p className="text-[10px] text-slate-500 font-bold uppercase">Server Opex</p>
+                <p className="text-sm font-mono">$700M</p>
+              </div>
+              <div className="p-4 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                <TrendingUp size={18} className="text-emerald-400 mb-2" />
+                <p className="text-[10px] text-emerald-500 font-bold uppercase">Total Revenue</p>
+                <p className="text-sm font-mono text-emerald-400">{formatCurrency(stats.annualRevenue)}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gradient-to-br from-emerald-600/20 to-transparent p-6 rounded-3xl border border-emerald-500/20">
+              <HeartPulse className="text-emerald-400 mb-4" />
+              <h3 className="text-white font-bold mb-1 uppercase tracking-tighter">Universal Health Units</h3>
+              <p className="text-4xl font-black text-white font-mono">{stats.clinicsFunded.toLocaleString()}</p>
+              <p className="text-xs text-slate-400 mt-2 italic">Standardized modular clinics deployed worldwide annually.</p>
+            </div>
+            <div className="bg-gradient-to-br from-blue-600/20 to-transparent p-6 rounded-3xl border border-blue-500/20">
+              <Droplets className="text-blue-400 mb-4" />
+              <h3 className="text-white font-bold mb-1 uppercase tracking-tighter">Water Purification Hubs</h3>
+              <p className="text-4xl font-black text-white font-mono">{stats.waterSystems.toLocaleString()}</p>
+              <p className="text-xs text-slate-400 mt-2 italic">Self-sustaining atmospheric water generators.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* The Surplus Logic */}
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
+          <h2 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] mb-8">System Balance</h2>
+          
+          <div className="space-y-8">
+            <div>
+              <div className="flex justify-between text-xs font-bold mb-2">
+                <span>REVENUE</span>
+                <span className="text-emerald-400">+{formatCurrency(stats.annualRevenue)}</span>
+              </div>
+              <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bg-emerald-500 w-full"></div>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex justify-between text-xs font-bold mb-2">
+                <span>SYSTEM COSTS</span>
+                <span className="text-red-400">-{formatCurrency(stats.totalSystemCost)}</span>
+              </div>
+              <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bg-red-500" style={{ width: `${Math.min(100, (stats.totalSystemCost/stats.annualRevenue)*100)}%` }}></div>
+              </div>
+            </div>
+
+            <div className="pt-8 border-t border-white/10">
+              <p className="text-[10px] font-black text-slate-500 uppercase mb-2">Annual Impact Surplus</p>
+              <p className={`text-5xl font-black italic tracking-tighter ${stats.surplus > 0 ? 'text-white' : 'text-red-500'}`}>
+                {formatCurrency(stats.surplus)}
+              </p>
+              <p className="text-[11px] text-slate-500 mt-4 leading-relaxed">
+                At 100M students, the Forge creates a <span className="text-emerald-400 font-bold">$17B annual surplus</span>. This is enough to rebuild the primary healthcare infrastructure of an entire continent every decade.
+              </p>
+            </div>
+
+            <button className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-black font-black uppercase text-xs tracking-widest rounded-xl transition-all flex items-center justify-center gap-2">
+              Deploy Surplus <ArrowRight size={14} />
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default App;
