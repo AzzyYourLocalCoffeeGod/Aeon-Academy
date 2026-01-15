@@ -1,0 +1,169 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Zap, 
+  Globe, 
+  ShieldCheck, 
+  Lock, 
+  Move, 
+  Sparkles, 
+  Cpu,
+  History,
+  CloudLightning,
+  ChevronRight
+} from 'lucide-react';
+
+const App = () => {
+  const [isRitualActive, setIsRitualActive] = useState(false);
+  const [ritualStep, setRitualStep] = useState(0);
+  const [quillsRemaining, setQuillsRemaining] = useState(99);
+
+  // Ritual steps for the 9-movement translation process
+  const ritualMovements = [
+    "Equator Sweep", "Vertex Anchor", "Plasma Pulse", 
+    "Linguistic Helix", "Charge Core", "Epsilon Slash", 
+    "Grid Alignment", "Static Discharge", "Final Seal"
+  ];
+
+  const startRitual = () => {
+    setIsRitualActive(true);
+    setRitualStep(0);
+  };
+
+  useEffect(() => {
+    if (isRitualActive && ritualStep < ritualMovements.length) {
+      const timer = setTimeout(() => {
+        setRitualStep(prev => prev + 1);
+      }, 800);
+      return () => clearTimeout(timer);
+    } else if (ritualStep === ritualMovements.length) {
+      const timer = setTimeout(() => setIsRitualActive(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isRitualActive, ritualStep]);
+
+  return (
+    <div className="min-h-screen bg-[#05050a] text-white font-sans selection:bg-blue-500/30">
+      
+      {/* Background FX */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/10 blur-[120px] rounded-full"></div>
+      </div>
+
+      <main className="relative z-10 max-w-6xl mx-auto px-6 py-12">
+        
+        {/* Top Navigation / Status */}
+        <div className="flex justify-between items-center mb-16">
+          <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2 rounded-full backdrop-blur-md">
+            <div className="w-2 h-2 bg-blue-400 rounded-full animate-ping"></div>
+            <span className="text-[10px] font-black uppercase tracking-widest text-blue-300">Epsilon Network Active</span>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">Limited Supply</p>
+            <p className="text-2xl font-black text-blue-400 italic leading-none">{quillsRemaining}/99 <span className="text-slate-600 text-sm not-italic">LEFT</span></p>
+          </div>
+        </div>
+
+        {/* Hero Section */}
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 mb-6">
+              <CloudLightning size={16} />
+              <span className="text-xs font-bold uppercase tracking-wide">Omega Tier Artifact</span>
+            </div>
+            <h1 className="text-6xl md:text-8xl font-black italic tracking-tighter mb-6 bg-gradient-to-br from-white via-blue-200 to-blue-600 bg-clip-text text-transparent">
+              EPSILON FEATHER
+            </h1>
+            <p className="text-lg text-slate-400 leading-relaxed max-w-md mb-8">
+              Forged in deep-plasma blue with a living lightning storm core. The ultimate tool for the Master Scribe.
+            </p>
+            
+            <div className="space-y-4 mb-10">
+              <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
+                <div className="p-2 bg-blue-500/20 rounded-lg text-blue-400">
+                  <Globe size={20} />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white uppercase tracking-wider">Universal Synthesis</h4>
+                  <p className="text-xs text-slate-500">3x Daily: Perfect automated translation of any note set via the 9-Movement Ritual.</p>
+                </div>
+              </div>
+            </div>
+
+            <button 
+              onClick={startRitual}
+              className="group relative px-10 py-5 bg-blue-600 rounded-2xl font-black text-sm uppercase tracking-[0.2em] overflow-hidden transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+              disabled={isRitualActive}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+              {isRitualActive ? 'Ritual in Progress...' : 'Execute Translation Ritual'}
+            </button>
+          </div>
+
+          {/* Artifact Visualizer */}
+          <div className="relative aspect-square flex items-center justify-center">
+            {/* The "Lightning Storm" Aura */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[80%] h-[80%] rounded-full bg-blue-500/20 blur-[60px] animate-pulse"></div>
+              <div className="absolute w-[60%] h-[60%] border border-blue-500/20 rounded-full animate-[spin_10s_linear_infinite]"></div>
+              <div className="absolute w-[90%] h-[90%] border border-white/5 rounded-full animate-[spin_20s_linear_infinite_reverse]"></div>
+            </div>
+
+            {/* The Quill Visualization */}
+            <div className="relative z-10 w-full h-full flex items-center justify-center rotate-[30deg]">
+               <div className="w-1.5 h-64 bg-gradient-to-b from-blue-400 via-blue-900 to-black rounded-full relative shadow-[0_0_50px_rgba(59,130,246,0.8)]">
+                  {/* Lightning Sparks */}
+                  <div className="absolute top-10 -left-8 w-16 h-0.5 bg-blue-300 blur-sm rotate-45 animate-pulse"></div>
+                  <div className="absolute top-32 -right-12 w-24 h-0.5 bg-cyan-300 blur-md -rotate-12 animate-pulse"></div>
+                  <div className="absolute bottom-10 left-4 w-12 h-1 bg-white blur-sm rotate-90 animate-ping"></div>
+               </div>
+               <div className="absolute w-24 h-72 bg-blue-600/30 blur-3xl opacity-50 rounded-full"></div>
+            </div>
+
+            {/* Ritual HUD Overlay */}
+            {isRitualActive && (
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm rounded-[3rem] animate-in fade-in duration-500">
+                <div className="w-64 space-y-4">
+                  <div className="flex justify-between text-[10px] font-black tracking-widest text-blue-400 uppercase">
+                    <span>Sequence {ritualStep}/9</span>
+                    <span>Synchronizing...</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,1)] transition-all duration-500" 
+                      style={{ width: `${(ritualStep / 9) * 100}%` }}
+                    ></div>
+                  </div>
+                  <div className="text-center mt-6">
+                    <p className="text-2xl font-black italic tracking-tighter text-white animate-pulse">
+                      {ritualMovements[ritualStep] || "COMPLETED"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Requirements Grid */}
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="p-8 rounded-[2rem] bg-slate-900/50 border border-white/5 hover:border-blue-500/30 transition-colors">
+            <h5 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Requirement 01</h5>
+            <p className="text-white font-bold leading-snug italic">Top 0.1% Global Clarity Ranking across 3+ Disciplines.</p>
+          </div>
+          <div className="p-8 rounded-[2rem] bg-slate-900/50 border border-white/5 hover:border-blue-500/30 transition-colors">
+            <h5 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Requirement 02</h5>
+            <p className="text-white font-bold leading-snug italic">1,000+ "Aha!" Reactions from peer students.</p>
+          </div>
+          <div className="p-8 rounded-[2rem] bg-slate-900/50 border border-white/5 hover:border-blue-500/30 transition-colors">
+            <h5 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Requirement 03</h5>
+            <p className="text-white font-bold leading-snug italic">Complete the 'Sovereign of Syntax' final exam.</p>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  );
+};
+
+export default App;
