@@ -1,0 +1,187 @@
+import React, { useState, useMemo } from 'react';
+import { 
+  Server, 
+  Activity, 
+  Cpu, 
+  Globe, 
+  TrendingUp, 
+  ArrowUpRight,
+  Database,
+  ShieldAlert,
+  Zap
+} from 'lucide-react';
+
+const App = () => {
+  // Network Scaling State
+  const [academyLoad, setAcademyLoad] = useState(400); // Millions of nodes
+  const [alumniLoad, setAlumniLoad] = useState(200);   // Millions of nodes
+  
+  // Economic Constants
+  const TUITION_MONTHLY = 25;
+  const SERVER_MAINTENANCE_PER_NODE_YEAR = 45; // Power, cooling, hardware replacement
+  const BANDWIDTH_OVERHEAD_PER_NODE_YEAR = 15; // Global backbone costs
+
+  const stats = useMemo(() => {
+    const totalActiveNodes = (academyLoad + alumniLoad) * 1e6;
+    const payingStudents = academyLoad * 1e6;
+    
+    const annualRevenue = payingStudents * TUITION_MONTHLY * 12;
+    const totalOpsCost = totalActiveNodes * (SERVER_MAINTENANCE_PER_NODE_YEAR + BANDWIDTH_OVERHEAD_PER_NODE_YEAR);
+    const netSurplus = annualRevenue - totalOpsCost;
+    
+    // Efficiency metrics
+    const costPerUserMonth = (SERVER_MAINTENANCE_PER_NODE_YEAR + BANDWIDTH_OVERHEAD_PER_NODE_YEAR) / 12;
+    const margin = ((annualRevenue - totalOpsCost) / annualRevenue) * 100;
+
+    return {
+      annualRevenue,
+      totalOpsCost,
+      netSurplus,
+      costPerUserMonth,
+      margin,
+      totalActiveNodes
+    };
+  }, [academyLoad, alumniLoad]);
+
+  const formatCurrency = (val) => {
+    if (val >= 1e12) return `$${(val / 1e12).toFixed(2)}T`;
+    if (val >= 1e9) return `$${(val / 1e9).toFixed(1)}B`;
+    return `$${(val / 1e6).toFixed(0)}M`;
+  };
+
+  return (
+    <div className="min-h-screen bg-[#08080a] text-slate-200 font-sans p-4 md:p-10">
+      <div className="max-w-6xl mx-auto">
+        
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-2 text-blue-500 font-mono text-sm tracking-widest">
+              <Activity size={16} />
+              <span>POST-INFRASTRUCTURE DEPLOYMENT</span>
+            </div>
+            <h1 className="text-5xl font-black text-white tracking-tighter">
+              EPSILON <span className="text-blue-600">OPS</span>
+            </h1>
+            <p className="text-slate-500 mt-2 max-w-md">
+              Initial $1B setup amortized. Current view: Real-time server maintenance and bandwidth costs vs. tuition revenue.
+            </p>
+          </div>
+          <div className="bg-blue-600 px-6 py-3 rounded-2xl shadow-lg shadow-blue-900/20">
+            <p className="text-[10px] uppercase font-bold text-blue-100 mb-1">Net Yearly Surplus</p>
+            <p className="text-3xl font-mono font-black text-white">{formatCurrency(stats.netSurplus)}</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          {/* Controls Column */}
+          <div className="lg:col-span-2 space-y-6">
+            
+            {/* Academy Slider */}
+            <div className="bg-[#111114] border border-white/5 p-8 rounded-[2rem] hover:border-blue-500/30 transition-colors">
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-3">
+                  <Cpu className="text-blue-500" size={24} />
+                  <h2 className="text-lg font-bold text-white uppercase tracking-tight">Academy Network Load</h2>
+                </div>
+                <span className="text-2xl font-mono font-black text-white">{academyLoad}M</span>
+              </div>
+              <input 
+                type="range" min="1" max="500" 
+                value={academyLoad} 
+                onChange={(e) => setAcademyLoad(Number(e.target.value))}
+                className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
+              />
+              <div className="flex justify-between mt-4 text-[10px] font-mono text-slate-500">
+                <span>1M MIN</span>
+                <span>500M NODES MAX CAPACITY</span>
+              </div>
+            </div>
+
+            {/* Alumni Slider */}
+            <div className="bg-[#111114] border border-white/5 p-8 rounded-[2rem] hover:border-purple-500/30 transition-colors">
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-3">
+                  <Database className="text-purple-500" size={24} />
+                  <h2 className="text-lg font-bold text-white uppercase tracking-tight">Alumni Network Load</h2>
+                </div>
+                <span className="text-2xl font-mono font-black text-white">{alumniLoad}M</span>
+              </div>
+              <input 
+                type="range" min="0" max="250" 
+                value={alumniLoad} 
+                onChange={(e) => setAlumniLoad(Number(e.target.value))}
+                className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500"
+              />
+              <div className="flex justify-between mt-4 text-[10px] font-mono text-slate-500">
+                <span>0 NODES</span>
+                <span>250M CONCURRENCY CAP</span>
+              </div>
+            </div>
+
+            {/* Financial Details */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-white/[0.02] p-6 rounded-3xl border border-white/5">
+                <p className="text-[10px] text-slate-500 font-bold uppercase mb-2">Operational Cost (OPEX)</p>
+                <p className="text-3xl font-mono font-black text-red-400">{formatCurrency(stats.totalOpsCost)}</p>
+                <p className="text-xs text-slate-500 mt-2 font-mono italic">~{formatCurrency(stats.costPerUserMonth)}/user/month</p>
+              </div>
+              <div className="bg-white/[0.02] p-6 rounded-3xl border border-white/5">
+                <p className="text-[10px] text-slate-500 font-bold uppercase mb-2">Annual Revenue (REV)</p>
+                <p className="text-3xl font-mono font-black text-emerald-400">{formatCurrency(stats.annualRevenue)}</p>
+                <p className="text-xs text-slate-500 mt-2 font-mono italic">$300/paying user/year</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar Insights */}
+          <div className="space-y-6">
+            <div className="bg-gradient-to-b from-blue-600/10 to-transparent p-8 rounded-[2rem] border border-blue-500/20">
+              <h3 className="text-xs font-black text-blue-400 uppercase tracking-widest mb-6">Network Health</h3>
+              
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-slate-400 font-medium">System Margin</span>
+                  <span className="text-xl font-mono text-white font-bold">{stats.margin.toFixed(1)}%</span>
+                </div>
+                <div className="flex justify-between items-center text-sm border-t border-white/5 pt-4">
+                  <span className="text-slate-400 font-medium">Active Bandwidth Usage</span>
+                  <span className="text-white font-mono">{(stats.totalActiveNodes / 1e6 * 0.4).toFixed(1)} Pb/s</span>
+                </div>
+                <div className="flex justify-between items-center text-sm border-t border-white/5 pt-4">
+                  <span className="text-slate-400 font-medium">Power Consumption</span>
+                  <span className="text-white font-mono">{(stats.totalActiveNodes / 1e6 * 2.1).toFixed(1)} GW</span>
+                </div>
+              </div>
+
+              <div className="mt-8 p-4 bg-black/40 rounded-xl border border-white/5">
+                <div className="flex gap-2 text-yellow-500 mb-2">
+                  <ShieldAlert size={16} />
+                  <span className="text-[10px] font-black uppercase tracking-tighter">Auto-Sustain Protocol</span>
+                </div>
+                <p className="text-[10px] leading-relaxed text-slate-500">
+                  Surplus is automatically diverted to global decentralized server redundant clusters to ensure 99.99% uptime for the 250M Alumni concurrent nodes.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-8 bg-[#111114] rounded-[2rem] border border-white/5 group cursor-default">
+               <div className="flex items-center justify-between mb-4">
+                  <Globe className="text-slate-500 group-hover:text-blue-500 transition-colors" size={20} />
+                  <ArrowUpRight className="text-slate-700" size={16} />
+               </div>
+               <h4 className="text-white font-bold mb-1">Global Mesh Access</h4>
+               <p className="text-xs text-slate-500 leading-relaxed">
+                 By leveraging the $25 tuition, the network covers the "silent" costs of the 250M graduated nodes, turning education into a perpetual global infrastructure.
+               </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
