@@ -1,0 +1,195 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Mic, 
+  BookOpen, 
+  Award, 
+  Lock, 
+  Unlock, 
+  Clock, 
+  FileText, 
+  Users,
+  Eye,
+  Zap
+} from 'lucide-react';
+
+const App = () => {
+  const [noteExp, setNoteExp] = useState(650);
+  const [maxNoteExp] = useState(1000);
+  const [timeRemaining, setTimeRemaining] = useState(1420); // 23:40 in seconds
+  const [isNoteTaking, setIsNoteTaking] = useState(false);
+  const [transcriptUnlocked, setTranscriptUnlocked] = useState(false);
+  const [notes, setNotes] = useState("");
+
+  useEffect(() => {
+    let timer;
+    if (timeRemaining > 0) {
+      timer = setInterval(() => {
+        setTimeRemaining(prev => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [timeRemaining]);
+
+  // Simulate EXP gain when typing notes
+  const handleNoteChange = (e) => {
+    setNotes(e.target.value);
+    if (!transcriptUnlocked) {
+      setNoteExp(prev => Math.min(prev + 0.5, maxNoteExp));
+      if (noteExp + 0.5 >= maxNoteExp) {
+        setTranscriptUnlocked(true);
+      }
+    }
+  };
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans p-4 md:p-8">
+      {/* Top Status Bar */}
+      <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4 mb-8 bg-slate-900/50 p-4 rounded-2xl border border-slate-800 backdrop-blur-md">
+        <div className="flex items-center gap-3">
+          <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+          <div>
+            <p className="text-xs uppercase tracking-widest text-slate-500 font-bold">Live Lecture</p>
+            <h2 className="text-sm font-semibold">Quantum Mechanics & The Covenant Lattice</h2>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-6">
+          <div className="flex flex-col items-end">
+            <span className="text-[10px] uppercase text-slate-500">Attendance Lock</span>
+            <div className="flex items-center gap-2 text-yellow-500">
+              <Clock size={14} />
+              <span className="font-mono font-bold">{formatTime(timeRemaining)}</span>
+            </div>
+          </div>
+          
+          <div className="h-10 w-[1px] bg-slate-800"></div>
+
+          <div className="flex flex-col items-end">
+            <span className="text-[10px] uppercase text-slate-500">Participants</span>
+            <div className="flex items-center gap-2 text-cyan-400">
+              <Users size={14} />
+              <span className="font-mono font-bold">1,242</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* VR Viewport Area */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="relative aspect-video rounded-3xl overflow-hidden border-4 border-slate-900 shadow-2xl bg-black">
+            {/* Mock VR Content */}
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200')] bg-cover bg-center opacity-60"></div>
+            
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+            
+            {/* Professor Overlay */}
+            <div className="absolute bottom-10 left-10 flex items-center gap-6">
+              <div className="w-20 h-20 rounded-full border-2 border-cyan-500 p-1">
+                <div className="w-full h-full rounded-full bg-slate-800 flex items-center justify-center">
+                  <Mic size={32} className="text-cyan-500" />
+                </div>
+              </div>
+              <div>
+                <p className="text-cyan-400 text-sm font-bold uppercase tracking-tighter">Arch-Lecturer</p>
+                <h3 className="text-2xl font-bold">Dr. Elias Thorne</h3>
+                <p className="text-xs text-slate-400">Broadcasting from Sector 07 Hub</p>
+              </div>
+            </div>
+
+            {/* VR UI HUD */}
+            <div className="absolute top-6 right-6 flex flex-col gap-2">
+              <div className="bg-black/60 backdrop-blur px-3 py-1 rounded-full border border-white/10 flex items-center gap-2">
+                <Eye size={12} className="text-emerald-400" />
+                <span className="text-[10px] font-mono">EYE-TRACKING: ACTIVE</span>
+              </div>
+              <div className="bg-black/60 backdrop-blur px-3 py-1 rounded-full border border-white/10 flex items-center gap-2">
+                <Zap size={12} className="text-yellow-400" />
+                <span className="text-[10px] font-mono">NEURAL SYNC: OPTIMAL</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-900/30 p-6 rounded-3xl border border-slate-800">
+            <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <BookOpen size={16} /> Session Resources
+            </h4>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between group cursor-pointer hover:border-cyan-500/50 transition-colors">
+                <div className="flex items-center gap-3">
+                  <FileText className="text-slate-500 group-hover:text-cyan-400" />
+                  <span className="text-sm font-medium">Lecture Slides</span>
+                </div>
+                <Lock size={14} className="text-slate-600" />
+              </div>
+              <div className={`p-4 bg-slate-900 rounded-xl border flex items-center justify-between transition-all ${transcriptUnlocked ? 'border-emerald-500/50 cursor-pointer' : 'border-slate-800 opacity-50'}`}>
+                <div className="flex items-center gap-3">
+                  <Award className={transcriptUnlocked ? 'text-emerald-400' : 'text-slate-500'} />
+                  <span className="text-sm font-medium">Full Transcript</span>
+                </div>
+                {transcriptUnlocked ? <Unlock size={14} className="text-emerald-400" /> : <Lock size={14} /> }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Note Taking Column */}
+        <div className="flex flex-col gap-6">
+          <div className="bg-slate-900 rounded-3xl border border-slate-800 p-6 flex-1 flex flex-col shadow-xl">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="font-bold text-lg">Neural Notes</h3>
+              <div className="bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full text-[10px] font-bold border border-emerald-500/20">
+                EXP GAIN: 1.5x
+              </div>
+            </div>
+
+            <textarea 
+              value={notes}
+              onChange={handleNoteChange}
+              placeholder="Start transcribing key concepts to unlock the session transcript..."
+              className="w-full flex-1 bg-slate-950 border border-slate-800 rounded-2xl p-4 text-sm text-slate-300 focus:outline-none focus:border-cyan-500/50 transition-colors resize-none mb-6"
+            />
+
+            <div className="space-y-2">
+              <div className="flex justify-between text-[10px] uppercase font-bold tracking-widest text-slate-500">
+                <span>Transcript Progress</span>
+                <span className={transcriptUnlocked ? "text-emerald-400" : "text-cyan-400"}>
+                  {Math.floor((noteExp / maxNoteExp) * 100)}%
+                </span>
+              </div>
+              <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full transition-all duration-500 rounded-full ${transcriptUnlocked ? 'bg-emerald-500' : 'bg-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.5)]'}`}
+                  style={{ width: `${(noteExp / maxNoteExp) * 100}%` }}
+                ></div>
+              </div>
+              {transcriptUnlocked && (
+                <p className="text-[10px] text-emerald-400 text-center animate-pulse font-bold mt-2">
+                  ✓ FULL TRANSCRIPT UNLOCKED
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-indigo-600/20 to-slate-900 border border-indigo-500/30 p-6 rounded-3xl">
+            <h4 className="text-xs font-bold text-indigo-300 uppercase mb-2">Lecture Library</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Once this session concludes, it will be indexed in your private library. Remember: Attendance is tracked via bio-sync. 
+              <span className="block mt-2 font-bold text-indigo-400 italic">"Presence is the first step to Mastery."</span>
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default App;
